@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Phòng Khách Sạn Cao Cấp</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary-color: #3417db; /* Màu xanh navy sang trọng */
+            --secondary-color: #f7b32d; /* Màu vàng cam làm điểm nhấn */
+        }
+
+        body {
+            background: #f8f9fa; /* Nền xám nhạt */
+            font-family: 'Roboto', Arial, sans-serif;
+            scroll-padding-top: 80px; 
+        }
+
+        /* NAVBAR */
+        .navbar-custom {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+        }
+        .navbar-custom .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+        .btn-outline-custom {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-outline-custom:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        /* CAROUSEL (MỚI) */
+        .carousel-item-custom {
+            height: 450px; /* Chiều cao cố định cho carousel */
+            background: #000;
+            border-radius: 15px; 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+        .carousel-caption {
+            top: 50%;
+            transform: translateY(-50%);
+            bottom: auto;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .carousel-caption h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        .carousel-caption p {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        /* NEW FEATURE CARDS STYLE (Giữ nguyên) */
+        .feature-card {
+            background-color: white;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+             transform: translateY(-3px);
+             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .feature-img {
+            width: 100%;
+            height: 200px; 
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .feature-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .section-text {
+            font-size: 16px; 
+            line-height: 1.7;
+            color: #495057;
+        }
+        
+        /* ROOM CARDS & MODAL STYLES (Giữ nguyên) */
+        .room-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .room-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .room-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .card-title-custom {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .price-text {
+            color: #e63946; 
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .star-rating {
+            color: var(--secondary-color);
+        }
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        .footer-custom {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+        .footer-custom a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .footer-custom a:hover {
+            color: var(--secondary-color);
+        }
+        .modal-header-custom {
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: none;
+        }
+        .modal-title-custom {
+            font-weight: 700;
+        }
+        .feature-icon {
+            color: var(--primary-color);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Style cho bảng tóm tắt trong Modal Tất cả phòng */
+        .room-summary-table img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+    <div class="container-fluid container">
+        <a class="navbar-brand" href="#top">
+            <i class="bi bi-house-door-fill" style="margin-right: 8px;"></i>
+            <b style="color: var(--secondary-color);">Hotel</b>Booking
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#top">Trang Chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="#phong-nghi-container">Phòng</a></li>
+                <li class="nav-item"><a class="nav-link" href="#tien-ich-container">Tiện Ích</a></li>
+                <li class="nav-item"><a class="nav-link" href="#dat-phong">Đặt Phòng</a></li>
+                <li class="nav-item"><a class="nav-link" href="#lien-he">Liên Hệ</a></li>
+            </ul>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                <button class="btn btn-outline-custom" type="submit">Tìm</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4" id="top">
+    <div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000"> 
+        
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+        </div>
+
+        <div class="carousel-inner carousel-item-custom">
+            
+            <div class="carousel-item active">
+                <img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="carousel-img d-block w-100" alt="Khách sạn sang trọng 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Trải nghiệm nghỉ dưỡng 4 sao</h1>
+                    <p>Địa điểm hoàn hảo cho kỳ nghỉ của bạn.</p>
+                </div>
+            </div>
+            
+            <div class="carousel-item">
+                <img src="c:\Users\Công Hiếu\Pictures\Saved Pictures\download (1).jfif" class="carousel-img d-block w-100" alt="Hồ bơi vô cực">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Hồ bơi vô cực trên cao</h1>
+                    <p>Tận hưởng view thành phố tuyệt đẹp.</p>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="https://images.pexels.com/photos/594077/pexels-photo-594077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="carousel-img d-block w-100" alt="Nội thất phòng nghỉ">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Phòng nghỉ đẳng cấp</h1>
+                    <p>Thiết kế tinh tế và tiện nghi hiện đại.</p>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="c:\Users\Công Hiếu\Pictures\Saved Pictures\download.jfif" class="carousel-img d-block w-100" alt="Nhà hàng">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Ẩm thực Quốc tế</h1>
+                    <p>Nhà hàng sang trọng, đa dạng món Á-Âu.</p>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="carousel-img d-block w-100" alt="Lễ tân">
+                <div class="carousel-caption d-none d-md-block">
+                    <h1>Dịch vụ tận tâm 24/7</h1>
+                    <p>Đội ngũ chuyên nghiệp luôn sẵn sàng phục vụ.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Trước</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Sau</span>
+        </button>
+
+    </div>
+</div>
+
+<div class="container mt-5 py-4">
+    <h2 class="text-center mb-5" style="font-weight: 700; color: var(--primary-color);">KHÁM PHÁ VỀ CHÚNG TÔI</h2>
+
+    <div class="row g-4">
+        <div class="col-lg-4 mb-4" id="gioi-thieu-anchor">
+            <div class="feature-card">
+                <img src="c:\Users\Công Hiếu\Pictures\Saved Pictures\pexels-photo-338504.jpeg" class="feature-img" alt="Giới thiệu">
+                <h3 class="feature-title">GIỚI THIỆU</h3>
+                <p class="section-text">
+                    Khách sạn chúng tôi mang đến không gian nghỉ dưỡng chuẩn **4 sao cao cấp**,
+                    phục vụ tận tâm – sang trọng – thoải mái. Cam kết đem lại trải nghiệm
+                    tuyệt vời và khó quên cho mọi du khách.
+                </p>
+                <a href="#" class="btn btn-link p-0" style="color: var(--secondary-color);"
+                   data-bs-toggle="modal" data-bs-target="#gioiThieuModal">
+                   Tìm hiểu thêm <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4" id="phong-nghi-container">
+            <div class="feature-card">
+                <img src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg" class="feature-img" alt="Phòng nghỉ">
+                <h3 class="feature-title">PHÒNG NGHỈ</h3>
+                <p class="section-text">
+                    Hệ thống phòng đa dạng: **Standard – Deluxe – Suite**, được thiết kế tinh tế.
+                    Đầy đủ tiện nghi hiện đại cùng với view biển tuyệt đẹp hoặc thành phố sôi động.
+                </p>
+                <a href="#" class="btn btn-link p-0" style="color: var(--secondary-color);"
+                   data-bs-toggle="modal" data-bs-target="#tatCaPhongModal">
+                   Xem tất cả phòng <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4" id="tien-ich-container">
+            <div class="feature-card">
+                <img src="c:\Users\Công Hiếu\Pictures\Saved Pictures\pexels-photo-261102.jpeg" class="feature-img" alt="Tiện ích">
+                <h3 class="feature-title">TIỆN ÍCH</h3>
+                <p class="section-text">
+                    Tận hưởng trọn vẹn với **Hồ bơi vô cực** ngoài trời, nhà hàng chuẩn quốc tế,
+                    phòng gym hiện đại và dịch vụ đưa đón sân bay 24/7.
+                </p>
+                <a href="#" class="btn btn-link p-0" style="color: var(--secondary-color);"
+                   data-bs-toggle="modal" data-bs-target="#tienIchModal">
+                    Danh sách tiện ích <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+---
+
+<div class="container mt-5 mb-5" id="dat-phong">
+    <h2 class="text-center mb-5" style="font-weight: 700; color: var(--primary-color);">LỰA CHỌN PHÒNG NGHỈ</h2>
+    <div class="row g-4">
+        
+        <div class="col-lg-4 col-md-6">
+            <div class="card room-card h-100">
+                <img class="card-img-top room-img" src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg" alt="Phòng Standard">
+                <div class="card-body">
+                    <h5 class="card-title card-title-custom">Phòng Standard</h5>
+                    <p class="card-text text-muted">Phòng tiêu chuẩn, tiện nghi cơ bản, ấm cúng.</p>
+                    <div class="star-rating mb-2">
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star">☆</i>
+                    </div>
+                    <p class="price-text">Giá từ 800.000đ / đêm</p>
+                    <a href="#" class="btn btn-primary-custom w-100" 
+                        data-bs-toggle="modal" data-bs-target="#standardModal">
+                        Xem Chi Tiết & Đặt
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card room-card h-100">
+                <img class="card-img-top room-img" src="https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg" alt="Phòng Deluxe">
+                <div class="card-body">
+                    <h5 class="card-title card-title-custom">Phòng Deluxe</h5>
+                    <p class="card-text text-muted">Phòng cao cấp, rộng rãi, view thành phố đẹp.</p>
+                    <div class="star-rating mb-2">
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-half">★</i>
+                    </div>
+                    <p class="price-text">Giá từ 1.200.000đ / đêm</p>
+                    <a href="#" class="btn btn-primary-custom w-100"
+                        data-bs-toggle="modal" data-bs-target="#deluxeModal">
+                        Xem Chi Tiết & Đặt
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card room-card h-100">
+                <img class="card-img-top room-img" src="https://images.pexels.com/photos/90319/pexels-photo-90319.jpeg" alt="Phòng Suite">
+                <div class="card-body">
+                    <h5 class="card-title card-title-custom">Phòng Suite</h5>
+                    <p class="card-text text-muted">Căn hộ hạng sang, phòng khách riêng, view biển trọn vẹn.</p>
+                    <div class="star-rating mb-2">
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                        <i class="bi bi-star-fill">★</i>
+                    </div>
+                    <p class="price-text">Giá từ 2.400.000đ / đêm</p>
+                    <a href="#" class="btn btn-primary-custom w-100" 
+                        data-bs-toggle="modal" data-bs-target="#suiteModal">
+                        Xem Chi Tiết & Đặt
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="gioiThieuModal" tabindex="-1" aria-labelledby="gioiThieuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="gioiThieuModalLabel">VỀ KHÁCH SẠN HOTELBOOKING</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg" class="img-fluid rounded mb-4" alt="Giới thiệu khách sạn" style="width: 100%; height: 250px; object-fit: cover;">
+                <p class="lead" style="color: var(--primary-color);">
+                    Chúng tôi tự hào là điểm đến lý tưởng cho chuyến nghỉ dưỡng và công tác của quý khách.
+                </p>
+                <h6 class="fw-bold mt-4">Tầm nhìn và Sứ mệnh</h6>
+                <p>Khách sạn HotelBooking được thành lập với tầm nhìn trở thành khách sạn 4 sao hàng đầu khu vực, mang lại dịch vụ cá nhân hóa, đẳng cấp quốc tế. Sứ mệnh của chúng tôi là tạo ra những khoảnh khắc đáng nhớ và trải nghiệm tuyệt vời cho mọi du khách.</p>
+                
+                <h6 class="fw-bold mt-4">Cam kết Dịch vụ</h6>
+                <ul>
+                    <li><i class="bi bi-star-fill feature-icon me-2"></i> Chất lượng phòng nghỉ chuẩn 4 sao cao cấp.</li>
+                    <li><i class="bi bi-clock-fill feature-icon me-2"></i> Đội ngũ nhân viên phục vụ tận tâm, chuyên nghiệp 24/7.</li>
+                    <li><i class="bi bi-shield-fill feature-icon me-2"></i> Đảm bảo an ninh và vệ sinh tuyệt đối trong khuôn viên khách sạn.</li>
+                </ul>
+
+                <blockquote class="blockquote mt-4 border-start border-5 ps-3" style="border-color: var(--secondary-color) !important;">
+                    <p class="mb-0 fst-italic">"Sự hài lòng của khách hàng là ưu tiên hàng đầu của HotelBooking."</p>
+                </blockquote>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tatCaPhongModal" tabindex="-1" aria-labelledby="tatCaPhongModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="tatCaPhongModalLabel">TỔNG QUAN CÁC LOẠI PHÒNG</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="lead text-center" style="color: var(--primary-color);">Chúng tôi có 3 hạng phòng chính để đáp ứng mọi nhu cầu nghỉ dưỡng của quý khách.</p>
+                
+                <table class="table table-hover mt-4 room-summary-table">
+                    <thead style="background-color: #e9ecef;">
+                        <tr>
+                            <th scope="col">Hạng Phòng</th>
+                            <th scope="col">Hình Ảnh</th>
+                            <th scope="col">Đặc Điểm</th>
+                            <th scope="col">Giá Tham Khảo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="align-middle fw-bold">Standard</td>
+                            <td class="align-middle"><img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg" alt="Standard"></td>
+                            <td class="align-middle">30m², Tiện nghi cơ bản, view nội khu.</td>
+                            <td class="align-middle price-text">800.000đ</td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle fw-bold">Deluxe</td>
+                            <td class="align-middle"><img src="https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg" alt="Deluxe"></td>
+                            <td class="align-middle">45m², Ban công, view thành phố, bồn tắm.</td>
+                            <td class="align-middle price-text">1.200.000đ</td>
+                        </tr>
+                        <tr>
+                            <td class="align-middle fw-bold">Suite</td>
+                            <td class="align-middle"><img src="https://images.pexels.com/photos/90319/pexels-photo-90319.jpeg" alt="Suite"></td>
+                            <td class="align-middle">65m², Phòng khách riêng, view biển trọn vẹn.</td>
+                            <td class="align-middle price-text">2.400.000đ</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="alert alert-info mt-4" role="alert">
+                    Vui lòng cuộn xuống khu vực "LỰA CHỌN PHÒNG NGHỈ" bên dưới để xem chi tiết từng phòng và tiến hành đặt phòng.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <a href="#dat-phong" class="btn btn-primary-custom" data-bs-dismiss="modal">Đi tới Đặt Phòng</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tienIchModal" tabindex="-1" aria-labelledby="tienIchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="tienIchModalLabel">CÁC TIỆN ÍCH CAO CẤP CỦA KHÁCH SẠN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="lead text-center" style="color: var(--primary-color);">Tận hưởng kỳ nghỉ trọn vẹn với các dịch vụ hàng đầu của chúng tôi.</p>
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-cloud-haze2-fill feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Hồ bơi Vô cực (Infinity Pool)</h6>
+                                <small class="text-muted">View thành phố và biển, phục vụ cocktail.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-suit-heart-fill feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Phòng Gym & Spa</h6>
+                                <small class="text-muted">Thiết bị hiện đại, dịch vụ massage cao cấp.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-cup-hot-fill feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Nhà hàng Quốc tế</h6>
+                                <small class="text-muted">Phục vụ ẩm thực Á - Âu, buffet sáng miễn phí.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-car-front-fill feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Dịch vụ Đón/Tiễn Sân bay</h6>
+                                <small class="text-muted">Hoạt động 24/7, đặt trước khi đến.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-people-fill feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Trung tâm Hội nghị</h6>
+                                <small class="text-muted">Phòng họp sang trọng, sức chứa 50-150 người.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-laptop feature-icon fs-3 me-3"></i>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: var(--primary-color);">Business Center</h6>
+                                <small class="text-muted">Máy tính, in ấn, thư ký cá nhân.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="standardModal" tabindex="-1" aria-labelledby="standardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="standardModalLabel">CHI TIẾT & ĐẶT PHÒNG STANDARD</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-lg-7 border-end">
+                        <h4 class="card-title-custom mb-3">Phòng Standard - Lựa chọn Kinh tế, tiện nghi</h4>
+                        <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg" class="img-fluid rounded mb-3" alt="Phòng Standard" style="height: 350px; width: 100%; object-fit: cover;">
+                        
+                        <p class="text-muted">Diện tích: 30m² | Sức chứa: 2 người lớn</p>
+                        <p>Phòng tiêu chuẩn ấm cúng, phù hợp cho khách du lịch cá nhân hoặc cặp đôi muốn tiết kiệm chi phí nhưng vẫn đảm bảo sự sạch sẽ và tiện nghi cơ bản.</p>
+                        
+                        <h6 class="mt-4">Tiện ích đi kèm:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Giường Queen size</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> TV màn hình phẳng</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Máy sấy tóc</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Wifi miễn phí</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Điều hòa nhiệt độ</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Tủ quần áo</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-5">
+                        <h4 class="text-center" style="color: var(--primary-color);">ĐẶT PHÒNG NGAY</h4>
+                        <p class="text-center price-text mb-4">Giá: 800.000đ / đêm</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="stdCheckInDate" class="form-label">Ngày Nhận Phòng</label>
+                                <input type="date" class="form-control" id="stdCheckInDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdCheckOutDate" class="form-label">Ngày Trả Phòng</label>
+                                <input type="date" class="form-control" id="stdCheckOutDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdGuestCount" class="form-label">Số Lượng Khách</label>
+                                <input type="number" class="form-control" id="stdGuestCount" value="2" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stdFullName" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" id="stdFullName" placeholder="Nhập họ tên của bạn" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="stdEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="stdEmail" placeholder="Nhập email" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success btn-lg w-100">HOÀN TẤT ĐẶT PHÒNG</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deluxeModal" tabindex="-1" aria-labelledby="deluxeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="deluxeModalLabel">CHI TIẾT & ĐẶT PHÒNG DELUXE</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-lg-7 border-end">
+                        <h4 class="card-title-custom mb-3">Phòng Deluxe - Không gian rộng rãi, view thành phố</h4>
+                        <img src="https://images.pexels.com/photos/271639/pexels-photo-271639.jpeg" class="img-fluid rounded mb-3" alt="Phòng Deluxe" style="height: 350px; width: 100%; object-fit: cover;">
+                        
+                        <p class="text-muted">Diện tích: 45m² | Sức chứa: 2 người lớn & 1 trẻ em</p>
+                        <p>Phòng Deluxe mang đến không gian nghỉ ngơi thoải mái hơn với khu vực làm việc nhỏ, ghế sofa thư giãn và ban công nhìn ra cảnh quan thành phố sôi động.</p>
+                        
+                        <h6 class="mt-4">Tiện ích đi kèm:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Giường King size cao cấp</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Ban công riêng</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Bàn làm việc</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Wifi tốc độ cao</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Minibar miễn phí (1 lần)</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Phòng tắm vòi sen & bồn tắm</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-5">
+                        <h4 class="text-center" style="color: var(--primary-color);">ĐẶT PHÒNG NGAY</h4>
+                        <p class="text-center price-text mb-4">Giá: 1.200.000đ / đêm</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="dlxCheckInDate" class="form-label">Ngày Nhận Phòng</label>
+                                <input type="date" class="form-control" id="dlxCheckInDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dlxCheckOutDate" class="form-label">Ngày Trả Phòng</label>
+                                <input type="date" class="form-control" id="dlxCheckOutDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dlxGuestCount" class="form-label">Số Lượng Khách</label>
+                                <input type="number" class="form-control" id="dlxGuestCount" value="2" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="dlxFullName" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" id="dlxFullName" placeholder="Nhập họ tên của bạn" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="dlxEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="dlxEmail" placeholder="Nhập email" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success btn-lg w-100">HOÀN TẤT ĐẶT PHÒNG</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="suiteModal" tabindex="-1" aria-labelledby="suiteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header modal-header-custom">
+                <h5 class="modal-title modal-title-custom" id="suiteModalLabel">CHI TIẾT & ĐẶT PHÒNG SUITE</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-lg-7 border-end">
+                        <h4 class="card-title-custom mb-3">Phòng Suite - Trải nghiệm Nghỉ dưỡng 5 Sao</h4>
+                        <img src="https://images.pexels.com/photos/90319/pexels-photo-90319.jpeg" class="img-fluid rounded mb-3" alt="Phòng Suite" style="height: 350px; width: 100%; object-fit: cover;">
+                        <p class="text-muted">Diện tích: 65m² | Sức chứa: 2 người lớn & 2 trẻ em</p>
+                        <p>Đây là căn hộ cao cấp nhất của chúng tôi, cung cấp không gian sống và thư giãn lý tưởng với phòng khách riêng, bồn tắm nằm và ban công nhìn ra biển trọn vẹn.</p>
+                        <h6 class="mt-4">Tiện ích đi kèm:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Giường King size</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Bồn tắm Jacuzzi</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Két sắt điện tử</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Wifi tốc độ cao miễn phí</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Mini bar miễn phí hàng ngày</li>
+                                    <li><i class="bi bi-check-circle-fill feature-icon me-2"></i> Dịch vụ giặt ủi miễn phí</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <h4 class="text-center" style="color: var(--primary-color);">ĐẶT PHÒNG NGAY</h4>
+                        <p class="text-center price-text mb-4">Giá: 2.400.000đ / đêm</p>
+                        <form>
+                            <div class="mb-3">
+                                <label for="suiteCheckInDate" class="form-label">Ngày Nhận Phòng</label>
+                                <input type="date" class="form-control" id="suiteCheckInDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="suiteCheckOutDate" class="form-label">Ngày Trả Phòng</label>
+                                <input type="date" class="form-control" id="suiteCheckOutDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="suiteGuestCount" class="form-label">Số Lượng Khách</label>
+                                <input type="number" class="form-control" id="suiteGuestCount" value="2" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="suiteFullName" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" id="suiteFullName" placeholder="Nhập họ tên của bạn" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="suiteEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="suiteEmail" placeholder="Nhập email" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-lg w-100">HOÀN TẤT ĐẶT PHÒNG</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-custom py-4 mt-5" id="lien-he">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>HotelBooking</h5>
+                <p>Khách sạn 4 sao, phục vụ tận tâm - Sang trọng - Thoải mái.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Liên kết nhanh</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#gioi-thieu-anchor">Về Chúng Tôi</a></li>
+                    <li><a href="#">Chính Sách</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Liên Hệ</h5>
+                <p>Email: hieutran972006@gmail.com</p>
+                <p>Điện thoại: (84) 901559782</p>
+            </div>
+        </div>
+        <div class="text-center pt-3 border-top border-secondary">
+            <p class="mb-0">&copy; 2025 HotelBooking. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
